@@ -1,0 +1,23 @@
+.wrapper{
+    height: 2000px;
+}
+.bar{
+    width: 600px;
+    height: 50px;
+    margin: 0 auto;
+}
+.first-bar{
+    background-color: #333333;
+}
+.second-bar{
+    background-color: #a5a5a5;
+}
+.any-block{
+    height: 300px;
+}
+.bar--fixed{
+    position: absolute;
+    left: 50%;
+    margin-left: -300px;
+    top:0;
+}
