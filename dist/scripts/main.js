@@ -3,29 +3,51 @@
         barsPos = [],
         i;
     window.onload = function () {
+        var isFixedSupported = (function(){
+            var isSupported = null;
+            if (document.createElement) {
+                var el = document.createElement("div");
+                if (el && el.style) {
+                    el.style.position = "fixed";
+                    el.style.top = "10px";
+                    var root = document.body;
+                    if (root && root.appendChild && root.removeChild) {
+                        root.appendChild(el);
+                        isSupported = el.offsetTop === 10;
+                        root.removeChild(el);
+                    }
+                }
+        }
+        return isSupported;
+    })();
         for(i = 0; i < bars.length; i++) barsPos[i] = bars[i].offsetTop;
-        eventScroll(barsPos);
+        eventScroll(barsPos, isFixedSupported);
         window.addEventListener('scroll', function () {
-            eventScroll(barsPos);
+            eventScroll(barsPos, isFixedSupported);
         });
+        window.scrollBy(0, 1);
     };
-    function eventScroll(pos) {
+    function eventScroll(pos, flag) {
         var oldPos = pos;
-        setTimeout(function() {
             for(i = 0; i < bars.length; i++){
-                if(bars[i].offsetTop - window.pageYOffset < 5) {
-                    addClass(bars[i], "bar--fixed");
-                    bars[i].style.marginTop = window.pageYOffset + 'px';
-                }else {
-                    if(window.pageYOffset <= oldPos[i]) {
-                        removeClass(bars[i], "bar--fixed");
-                        bars[i].style.marginTop = '0px';
-                    }else{
+                if(bars[i].offsetTop - window.pageYOffset < 0) {
+                    if(flag) addClass(bars[i], "bar--fixed");
+                    else{
+                        addClass(bars[i], "bar--no-fixed");
                         bars[i].style.marginTop = window.pageYOffset + 'px';
                     }
                 }
+                if(window.pageYOffset <= oldPos[i]) {
+                    if(flag) removeClass(bars[i], "bar--fixed");
+                    else{
+                        removeClass(bars[i], "bar--no-fixed");
+                        bars[i].style.marginTop = '0px';
+                    }
+                 }
+                else{
+                     if(!flag) bars[i].style.marginTop = window.pageYOffset + 'px';
+                }
             }
-        }, 250);
     }
     function addClass(o, c) {
         var re = new RegExp("(^|\\s)" + c + "(\\s|$)", "g");

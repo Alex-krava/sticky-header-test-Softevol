@@ -16,6 +16,12 @@
     height: 300px;
 }
 .bar--fixed{
+    position: fixed;
+    left: 50%;
+    margin-left: -300px;
+    top:0;
+}
+.bar--no-fixed{
     position: absolute;
     left: 50%;
     margin-left: -300px;
